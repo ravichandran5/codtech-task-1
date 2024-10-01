@@ -1,0 +1,45 @@
+#include <ESP8266WiFi.h>
+#include <ESP8266WebServer.h>
+
+const char* ssid = "your_SSID";
+const char* password = "your_PASSWORD";
+
+ESP8266WebServer server(80);
+
+// Relay pin
+const int relayPin = 5; // GPIO14 for ESP8266
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(relayPin, OUTPUT);
+  digitalWrite(relayPin, LOW); // Start with relay off
+
+  // Connect to Wi-Fi
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("Connected to Wi-Fi");
+
+  // Define server routes
+  server.on("/", HTTP_GET, []() {
+    server.send(200, "text/html", "<h1>Welcome to Smart Home System</h1>");
+  });
+
+  server.on("/relay/on", HTTP_GET, []() {
+    digitalWrite(relayPin, HIGH);
+    server.send(200, "text/plain", "Relay turned ON");
+  });
+
+  server.on("/relay/off", HTTP_GET, []() {
+    digitalWrite(relayPin, LOW);
+    server.send(200, "text/plain", "Relay turned OFF");
+  });
+
+  server.begin();
+}
+
+void loop() {
+  server.handleClient();
+}
