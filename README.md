@@ -1,1 +1,1 @@
-https://github.com/ravichandran5/codtech-task-1/issues/1#issue-2558294839
+![Capture](https://github.com/user-attachments/assets/664aba12-50af-4e57-87e4-298ec4d2b208)
